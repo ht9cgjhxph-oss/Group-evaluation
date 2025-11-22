@@ -1,29 +1,26 @@
-name: Update Votes
+name: Update votes (from dispatch)
 
 on:
   repository_dispatch:
-    types: [update-votes]
+    types: [update_votes]
 
 jobs:
-  update:
+  update_votes:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Update data.json
+      - name: Save payload to votes.json
         run: |
-          echo "$PAYLOAD" > new_votes.json
-          node update.js
+          echo "Writing votes.json from dispatch payload"
+          echo '${{ toJson(github.event.client_payload.votes) }}' > votes.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add votes.json
+          git commit -m "Update votes.json (via dispatch)" || echo "No changes to commit"
 
-      - name: Commit changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add data.json
-          git commit -m "Updated votes" || echo "No changes to commit"
-          git push
-
-    env:
-      PAYLOAD: ${{ github.event.client_payload.data }}
-      TOKEN: ${{ secrets.API_TOKEN }}
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.ACTIONS_PUSH_TOKEN }}
