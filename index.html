@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>تقييم المجموعات</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#f6e0f5; /* فاتح بنفسجي */
+    --accent:#7b3bb7;
+    --muted:#85608f;
+    --card-shadow: 0 14px 36px rgba(124,63,185,0.08);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:"Tajawal",sans-serif;
+    background:var(--page-bg);
+    color:#333;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:28px 12px 80px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+  header{ text-align:center; margin:6px 0 18px;}
+  h1{color:var(--accent); font-size:44px; margin:6px 0; font-weight:800;}
+  p.lead{color:var(--muted); margin:0 0 18px; font-size:16px;} 
+
+  /* card */
+  .card{background:#fff;border-radius:18px;padding:18px;box-shadow:var(--card-shadow);border:3px solid rgba(124,63,185,0.04);}
+
+  /* group box */
+  .group{
+    position:relative;
+    border-radius:var(--radius);
+    padding:30px 28px 22px;
+    margin:44px 0 28px;
+    display:block;
+    overflow:visible;
+  }
+  .group .circle{
+    width:88px;height:88px;border-radius:50%;
+    background:#fff;border:6px solid #fff; position:absolute; left:50%; transform:translateX(-50%); top:-44px;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 8px 22px rgba(0,0,0,0.06);
+  }
+  .group .circle img{width:72px;height:72px;border-radius:50%;object-fit:cover;}
+
+  .group h2{ text-align:center; margin:18px 0 6px; font-size:22px; font-weight:800; color:var(--accent); }
+
+  .progress-wrap{ width:92%; margin:8px auto 18px; }
+  .progress-bg{ background: #fbf3f8; height:14px; border-radius:10px; overflow:hidden; border:1px solid rgba(0,0,0,0.03); }
+  .progress-fill{ height:100%; width:0%; transition:width .28s ease; }
+
+  /* criteria row */
+  .row{ display:flex; justify-content:space-between; gap:12px; align-items:center; margin-top:18px; flex-wrap:wrap; padding:6px 12px; }
+  .crit{
+    width:18%; min-width:120px; text-align:center;
+  }
+  .crit .btn{
+    width:68px;height:68px;border-radius:18px;background:#fff;border:2px solid rgba(0,0,0,0.04);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+    transition: transform .14s, box-shadow .14s;
+    box-shadow:0 6px 18px rgba(0,0,0,0.04);
+  }
+  .crit .btn:active, .crit .btn.active{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.16); }
+  .crit .label{ display:block; margin-top:8px; color:var(--muted); font-weight:700; font-size:14px; }
+
+  /* Butterfly Image Sizing */
+  .butterfly-img { width: 44px; height: 44px; display: block; object-fit: contain; }
+
+  /* colors for groups */
+  .g-jori{ background: linear-gradient(180deg, rgba(255,246,240,0.9), #fff); border:3px solid rgba(255,160,76,0.10); }
+  .g-jori .progress-fill{ --g-color: #ff8b2d; background: linear-gradient(90deg,var(--g-color),#ffc8a0); }
+  .g-jori h2 { color: #ff8b2d; }
+
+  .g-yas{ background: linear-gradient(180deg, rgba(236,252,255,0.95), #fff); border:3px solid rgba(92,163,255,0.10); }
+  .g-yas .progress-fill{ --g-color: #5fb6ff; background: linear-gradient(90deg,var(--g-color),#cfeeff); }
+  .g-yas h2 { color: #5fb6ff; }
+
+  .g-lav{ background: linear-gradient(180deg, rgba(247,241,251,0.95), #fff); border:3px solid rgba(183,147,214,0.10); }
+  .g-lav .progress-fill{ --g-color: #b793d6; background: linear-gradient(90deg,var(--g-color),#d8b8f0); }
+  .g-lav h2 { color: #b793d6; }
+
+  .g-orch{ background: linear-gradient(180deg, rgba(255,250,236,0.95), #fff); border:3px solid rgba(255,205,100,0.10); }
+  .g-orch .progress-fill{ --g-color: #ffd54d; background: linear-gradient(90deg,var(--g-color),#ffde9a); }
+  .g-orch h2 { color: #ffd54d; }
+
+  .g-fal{ background: linear-gradient(180deg, rgba(245,251,245,0.95), #fff); border:3px solid rgba(100,200,120,0.10); }
+  .g-fal .progress-fill{ --g-color: #9adf9a; background: linear-gradient(90deg,var(--g-color),#c9f4c5); }
+  .g-fal h2 { color: #9adf9a; }
+
+  .g-tul{ background: linear-gradient(180deg, rgba(255,244,250,0.95), #fff); border:3px solid rgba(255,160,220,0.10); }
+  .g-tul .progress-fill{ --g-color: #ff9ad0; background: linear-gradient(90deg,var(--g-color),#ffc6e6); }
+  .g-tul h2 { color: #ff9ad0; }
+
+  /* controls */
+  .controls{ text-align:center; margin-top:30px; }
+  .btn-primary{ background:var(--accent); color:#fff; border:none; padding:12px 20px; border-radius:12px; cursor:pointer; font-weight:800; font-size:18px; box-shadow:0 10px 28px rgba(124,63,185,0.12); }
+
+  /* Ranking Display (Modal replacement) */
+  #rankingContainer {
+    margin-top: 30px;
+    padding: 18px;
+    background: #fff;
+    border-radius: 12px;
+    border: 3px solid rgba(124,63,185,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: none;
+  }
+  .rank-item{ 
+    display:flex; align-items:center; justify-content:space-between; 
+    padding:14px 10px; border-bottom:1px solid #f0f0f0; 
+  }
+  .rank-item:last-child { border-bottom: none; }
+  .rank-info{ display: flex; align-items: center; gap: 15px; }
+  .rank-badge{ font-size: 24px; font-weight: 800; width: 30px; text-align: center; }
+  .rank-name{ font-size: 18px; font-weight: 700; color: #444; }
+  .rank-score{ font-size: 20px; font-weight: 900; color: var(--accent); }
+
+  .teacher-info {
+      text-align: center;
+      margin: 20px 0 15px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+  }
+  .submit-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+  }
+
+  @media (max-width:760px){
+    .crit{ width:30%; min-width:90px;}
+    .group{ padding:20px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>تقييم المجموعات</h1>
+      <p class="lead">“لأن التميّز يُصنع بالتعاون، ولأن النجاح يُزهر بالالتزام… نُقيّم اليوم مجموعاتنا لنمنح كل زهرة حقّها في البريق"</p>
+    </header>
+
+    <div class="card">
+      
+      <section class="group g-jori" data-name="مجموعة الجوري">
+        <div class="circle" aria-hidden="true"><img src="https://i.ibb.co/99p7dg6w/IMG-5882.jpg" alt="جوري"></div>
+        <h2>مجموعة الجوري</h2>
+        <div class="progress-wrap">
+          <div class="progress-bg"><div class="progress-fill" data-fill></div></div>
+        </div>
+
+        <div class="row">
+          <div class="crit">
+            <div class="btn" data-idx="0" role="button" aria-pressed="false" aria-label="المشاركة">
+              <img class="butterfly-img" src="https://i.ibb.co/svrQ54fZ/IMG-5923.png" alt="فراشة">
+            </div>
+            <span class="label">المشاركة</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="1" role="button" aria-pressed="false" aria-label="التعاون">
+              <img class="butterfly-img" src="https://i.ibb.co/svrQ54fZ/IMG-5923.png" alt="فراشة">
+            </div>
+            <span class="label">التعاون</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="2" role="button" aria-pressed="false" aria-label="الهدوء">
+              <img class="butterfly-img" src="https://i.ibb.co/svrQ54fZ/IMG-5923.png" alt="فراشة">
+            </div>
+            <span class="label">الهدوء</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="3" role="button" aria-pressed="false" aria-label="السرعة">
+              <img class="butterfly-img" src="https://i.ibb.co/svrQ54fZ/IMG-5923.png" alt="فراشة">
+            </div>
+            <span class="label">السرعة</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="4" role="button" aria-pressed="false" aria-label="الانضباط">
+              <img class="butterfly-img" src="https://i.ibb.co/svrQ54fZ/IMG-5923.png" alt="فراشة">
+            </div>
+            <span class="label">الانضباط</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="group g-yas" data-name="مجموعة الياسمين">
+        <div class="circle" aria-hidden="true"><img src="https://i.ibb.co/HfHyWrZ0/image.png" alt="ياسمين"></div>
+        <h2>مجموعة الياسمين</h2>
+        <div class="progress-wrap">
+          <div class="progress-bg"><div class="progress-fill" data-fill></div></div>
+        </div>
+
+        <div class="row">
+          <div class="crit">
+            <div class="btn" data-idx="0" role="button" aria-pressed="false">
+              <img class="butterfly-img" src="https://i.ibb.co/jZwKvkKx/IMG-5926.png" alt="فراشة">
+            </div>
+            <span class="label">المشاركة</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="1" role="button" aria-pressed="false">
+              <img class="butterfly-img" src="https://i.ibb.co/jZwKvkKx/IMG-5926.png" alt="فراشة">
+            </div>
+            <span class="label">التعاون</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="2" role="button" aria-pressed="false">
+              <img class="butterfly-img" src="https://i.ibb.co/jZwKvkKx/IMG-5926.png" alt="فراشة">
+            </div>
+            <span class="label">الهدوء</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="3" role="button" aria-pressed="false">
+              <img class="butterfly-img" src="https://i.ibb.co/jZwKvkKx/IMG-5926.png" alt="فراشة">
+            </div>
+            <span class="label">السرعة</span>
+          </div>
+
+          <div class="crit">
+            <div class="btn" data-idx="4" role="button" aria-pressed="false">
+              <img class="butterfly-img" src="https://i.ibb.co/jZwKvkKx/IMG-5926.png" alt="فراشة">
+            </div>
+            <span class="label">الانضباط</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="group g-lav" data-name="مجموعة اللافندر">
+        <div class="circle"><img src="https://i.ibb.co/Mx2LxRcs/image.jpg" alt="لافندر"></div>
+        <h2>مجموعة اللافندر</h2>
+        <div class="progress-wrap"><div class="progress-bg"><div class="progress-fill" data-fill></div></div></div>
+        <div class="row">
+          <div class="crit"><div class="btn" data-idx="0"><img class="butterfly-img" src="https://i.ibb.co/rGS8Y7y2/IMG-5924.png" alt="فراشة"></div><span class="label">المشاركة</span></div>
+          <div class="crit"><div class="btn" data-idx="1"><img class="butterfly-img" src="https://i.ibb.co/rGS8Y7y2/IMG-5924.png" alt="فراشة"></div><span class="label">التعاون</span></div>
+          <div class="crit"><div class="btn" data-idx="2"><img class="butterfly-img" src="https://i.ibb.co/rGS8Y7y2/IMG-5924.png" alt="فراشة"></div><span class="label">الهدوء</span></div>
+          <div class="crit"><div class="btn" data-idx="3"><img class="butterfly-img" src="https://i.ibb.co/rGS8Y7y2/IMG-5924.png" alt="فراشة"></div><span class="label">السرعة</span></div>
+          <div class="crit"><div class="btn" data-idx="4"><img class="butterfly-img" src="https://i.ibb.co/rGS8Y7y2/IMG-5924.png" alt="فراشة"></div><span class="label">الانضباط</span></div>
+        </div>
+      </section>
+
+      <section class="group g-orch" data-name="مجموعة الأوركيد">
+        <div class="circle"><img src="https://i.ibb.co/7JfQF3R9/IMG-5880.jpg" alt="اوركيد"></div>
+        <h2>مجموعة الأوركيد</h2>
+        <div class="progress-wrap"><div class="progress-bg"><div class="progress-fill" data-fill></div></div></div>
+        <div class="row">
+          <div class="crit"><div class="btn" data-idx="0"><img class="butterfly-img" src="https://i.ibb.co/HfXyxR4V/IMG-5922.png" alt="فراشة"></div><span class="label">المشاركة</span></div>
+          <div class="crit"><div class="btn" data-idx="1"><img class="butterfly-img" src="https://i.ibb.co/HfXyxR4V/IMG-5922.png" alt="فراشة"></div><span class="label">التعاون</span></div>
+          <div class="crit"><div class="btn" data-idx="2"><img class="butterfly-img" src="https://i.ibb.co/HfXyxR4V/IMG-5922.png" alt="فراشة"></div><span class="label">الهدوء</span></div>
+          <div class="crit"><div class="btn" data-idx="3"><img class="butterfly-img" src="https://i.ibb.co/HfXyxR4V/IMG-5922.png" alt="فراشة"></div><span class="label">السرعة</span></div>
+          <div class="crit"><div class="btn" data-idx="4"><img class="butterfly-img" src="https://i.ibb.co/HfXyxR4V/IMG-5922.png" alt="فراشة"></div><span class="label">الانضباط</span></div>
+        </div>
+      </section>
+
+      <section class="group g-fal" data-name="مجموعة الفل">
+        <div class="circle"><img src="https://i.ibb.co/rRmZjW1S/image.png" alt="فل"></div>
+        <h2>مجموعة الفل</h2>
+        <div class="progress-wrap"><div class="progress-bg"><div class="progress-fill" data-fill></div></div></div>
+        <div class="row">
+          <div class="crit"><div class="btn" data-idx="0"><img class="butterfly-img" src="https://i.ibb.co/BKG1hr10/IMG-5925.png" alt="فراشة"></div><span class="label">المشاركة</span></div>
+          <div class="crit"><div class="btn" data-idx="1"><img class="butterfly-img" src="https://i.ibb.co/BKG1hr10/IMG-5925.png" alt="فراشة"></div><span class="label">التعاون</span></div>
+          <div class="crit"><div class="btn" data-idx="2"><img class="butterfly-img" src="https://i.ibb.co/BKG1hr10/IMG-5925.png" alt="فراشة"></div><span class="label">الهدوء</span></div>
+          <div class="crit"><div class="btn" data-idx="3"><img class="butterfly-img" src="https://i.ibb.co/BKG1hr10/IMG-5925.png" alt="فراشة"></div><span class="label">السرعة</span></div>
+          <div class="crit"><div class="btn" data-idx="4"><img class="butterfly-img" src="https://i.ibb.co/BKG1hr10/IMG-5925.png" alt="فراشة"></div><span class="label">الانضباط</span></div>
+        </div>
+      </section>
+
+      <section class="group g-tul" data-name="مجموعة التوليب">
+        <div class="circle"><img src="https://i.ibb.co/nMDF7Dp7/image.png" alt="توليب"></div>
+        <h2>مجموعة التوليب</h2>
+        <div class="progress-wrap"><div class="progress-bg"><div class="progress-fill" data-fill></div></div></div>
+        <div class="row">
+          <div class="crit"><div class="btn" data-idx="0"><img class="butterfly-img" src="https://i.ibb.co/Y4Tnzjs0/IMG-5927.png" alt="فراشة"></div><span class="label">المشاركة</span></div>
+          <div class="crit"><div class="btn" data-idx="1"><img class="butterfly-img" src="https://i.ibb.co/Y4Tnzjs0/IMG-5927.png" alt="فراشة"></div><span class="label">التعاون</span></div>
+          <div class="crit"><div class="btn" data-idx="2"><div class="btn" data-idx="2"><img class="butterfly-img" src="https://i.ibb.co/Y4Tnzjs0/IMG-5927.png" alt="فراشة"></div></div><span class="label">الهدوء</span></div>
+          <div class="crit"><div class="btn" data-idx="3"><img class="butterfly-img" src="https://i.ibb.co/Y4Tnzjs0/IMG-5927.png" alt="فراشة"></div><span class="label">السرعة</span></div>
+          <div class="crit"><div class="btn" data-idx="4"><div class="btn" data-idx="4"><img class="butterfly-img" src="https://i.ibb.co/Y4Tnzjs0/IMG-5927.png" alt="فراشة"></div></div><span class="label">الانضباط</span></div>
+        </div>
+      </section>
+
+      <div class="teacher-info">إعداد المعلمة / عايشة المطيري</div>
+
+      <div class="controls">
+        <button class="btn-primary" id="showRanking">إظهار الفائزين</button>
+      </div>
+
+      <div id="rankingContainer">
+        <h3 style="color:var(--accent); margin-top:0; text-align:right;">ترتيب المجموعات (النتائج الحالية)</h3>
+        <div id="rankingList">
+          <p style="text-align:center; color:#888;">اضغط على "إظهار الفائزين" لعرض الترتيب.</p>
+        </div>
+      </div>
+      
+      <a id="submit-form-link" class="submit-link" href="#" target="_blank" style="color:var(--accent); font-weight:700;">
+        <span style="border-bottom: 2px dashed var(--accent);">
+          اضغط هنا لإرسال التقييم النهائي
+        </span>
+      </a>
+
+    </div> </div> <script>
+(function(){
+  const rankingContainer = document.getElementById('rankingContainer');
+  const rankingList = document.getElementById('rankingList');
+  const submitLink = document.getElementById('submit-form-link');
+
+  // **هام:** ضع رابط نموذج جوجل الخاص بك هنا.
+  // مثال: submitLink.href = "https://docs.google.com/forms/d/e/1FAIpQLScz_qY3kR_Sj0P0V2kFhV7tY4/viewform?usp=sf_link";
+  submitLink.href = "https://www.google.com/forms/"; // Placeholder link
+
+  // جمع الأقسام (المجموعات)
+  const groups = Array.from(document.querySelectorAll('section.group')).map(section=>{
+    const name = section.dataset.name;
+    const fillEl = section.querySelector('[data-fill]');
+    const btns = Array.from(section.querySelectorAll('.btn'));
+    const state = [false,false,false,false,false];
+    const groupColor = section.querySelector('.progress-fill').style.getPropertyValue('--g-color');
+    
+    // إضافة لون العنوان بناءً على لون البار
+    section.querySelector('h2').style.color = groupColor;
+
+    btns.forEach((b, idx)=>{
+      b.addEventListener('click', ()=>{
+        state[idx] = !state[idx];
+        b.classList.toggle('active', state[idx]);
+        b.setAttribute('aria-pressed', state[idx]);
+        
+        const count = state.filter(Boolean).length;
+        if(fillEl) fillEl.style.width = (count/5*100) + '%';
+        
+        // **ملاحظة:** هنا يمكنك إضافة منطق لتحديث رابط إرسال النموذج بنقاط المجموعة إذا كان النموذج يسمح بذلك.
+        // مثال: updateGoogleFormLink(name, count);
+      });
+    });
+
+    if(fillEl) fillEl.style.width = '0%';
+    
+    return { 
+      name, 
+      el: section, 
+      state, 
+      score(){ return this.state.filter(Boolean).length; }, 
+      img: section.querySelector('.circle img').src,
+      color: groupColor
+    };
+  });
+
+  // وظيفة عرض الترتيب
+  function displayRanking() {
+    // هذه الوظيفة تحسب الترتيب بناءً على ضغطات المستخدم الحالية فقط.
+    // يجب الرجوع إلى تقارير Google Forms لتحديد الفائز الحقيقي.
+    const sorted = groups.slice().sort((a,b)=> b.score()-a.score() || a.name.localeCompare(b.name));
+    
+    rankingList.innerHTML = ''; 
+    
+    sorted.forEach((g,i)=>{
+      const div = document.createElement('div');
+      div.className = 'rank-item';
+      div.style.setProperty('--accent', g.color);
+
+      let badge = '';
+      if (i === 0) badge = '🥇';
+      else if (i === 1) badge = '🥈';
+      else if (i === 2) badge = '🥉';
+      else badge = `#${i+1}`;
+
+      div.innerHTML = `
+        <div class="rank-info">
+          <div class="rank-badge">${badge}</div>
+          <div class="rank-name">${g.name}</div>
+        </div>
+        <div class="rank-score">${g.score()} / 5</div>
+      `;
+      rankingList.appendChild(div);
+    });
+    
+    rankingContainer.style.display = 'block';
+    rankingContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.getElementById('showRanking').addEventListener('click', displayRanking);
+
+})();
+</script>
+</body>
+</html>		
