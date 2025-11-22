@@ -1,0 +1,92 @@
+body {
+    font-family: "Cairo", sans-serif;
+    background: #f7f5ff;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #6d4caf;
+    font-size: 32px;
+}
+
+.quote {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #444;
+}
+
+.group {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px #0001;
+}
+
+.flower {
+    width: 120px;
+    display: block;
+    margin: 0 auto;
+}
+
+.title {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.jasmine { color: #ffc107; }
+.rose { color: #d81b60; }
+.tulip { color: #ff7043; }
+.ful { color: #8bc34a; }
+.lavender { color: #9575cd; }
+.orchid { color: #7b1fa2; }
+
+.vote-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.butterfly {
+    width: 60px;
+}
+
+.bar {
+    width: 90%;
+    height: 12px;
+    background: #ddd;
+    border-radius: 10px;
+    margin: 15px auto;
+}
+
+.fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+#show-winners {
+    background: #6a1b9a;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+#ranking {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #4a148c;
+}
+
+.teacher {
+    margin-top: 30px;
+    font-size: 18px;
+}
