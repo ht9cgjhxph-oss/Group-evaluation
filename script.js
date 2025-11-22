@@ -1,6 +1,6 @@
 const username = "AishaAlmutairi";
 const repo = "class-evaluation";
-const filePath = "results.json";
+const filePath = "votes.json";
 
 async function getFile() {
     const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${filePath}`);
