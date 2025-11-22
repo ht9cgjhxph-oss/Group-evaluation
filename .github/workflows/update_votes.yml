@@ -1,0 +1,29 @@
+name: Update Votes
+
+on:
+  repository_dispatch:
+    types: [update-votes]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update data.json
+        run: |
+          echo "$PAYLOAD" > new_votes.json
+          node update.js
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data.json
+          git commit -m "Updated votes" || echo "No changes to commit"
+          git push
+
+    env:
+      PAYLOAD: ${{ github.event.client_payload.data }}
+      TOKEN: ${{ secrets.API_TOKEN }}
