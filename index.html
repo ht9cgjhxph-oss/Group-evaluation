@@ -82,45 +82,49 @@ transition: transform .14s, box-shadow .14s;
 height: 44px; display: block; object-fit: contain; }
 @media (max-width: 600px) {
 
-    /* توزيع الفراشات في 5 أعمدة */
+    /* تقليل المسافات حول المحتوى داخل البوكس */
+    .group {
+        padding: 20px 10px !important;
+    }
+
+    /* تخلي الفراشات يتجمعون داخل البوكس بدون ما يطلعون برا */
     .row {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        gap: 8px;
-        justify-items: center;
+        gap: 6px;     /* ← تصغير المسافة بينهم */
+        padding: 0 5px;  /* ← يدخل الفراشات داخل البوكس */
     }
 
-    /* تصغير الصندوق */
+    /* تصغير صندوق الفراشة */
     .crit {
-        width: 100%;
-        min-width: 0;
+        min-width: auto;
     }
 
-    /* زر الفراشة */
     .crit .btn {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 8px;
     }
 
-    /* صورة الفراشة */
+    /* تصغير صورة الفراشة */
     .butterfly-img {
         width: 20px;
         height: 20px;
     }
 
-    /* النص */
+    /* تصغير النص */
     .crit .label {
         font-size: 10px;
-        text-align: center;
     }
 
-    /* صورة المجموعة فوق */
+    /* 🔥 تصغير صورة الورد وتعديل مكانها */
     .circle img {
         width: 55px !important;
         height: 55px !important;
+        top: -28px !important;   /* تقلل نزولها على العنوان */
     }
 }
+
 
   /* colors for groups */
   .g-jori{ background: linear-gradient(180deg, rgba(255,246,240,0.9), #fff);
